@@ -5,4 +5,5 @@ import com.example.urlshortener.dto.UrlResponse;
 
 public interface UrlService {
     UrlResponse createUrl(UrlRequest request);
+    String getOriginalUrl(String shortCode);
 }

@@ -7,6 +7,8 @@ import com.example.urlshortener.repository.UrlRepository;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
 import java.time.LocalDateTime;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 @Service
 public class UrlServiceImpl implements UrlService {
@@ -38,6 +40,14 @@ public class UrlServiceImpl implements UrlService {
         response.setCreatedAt(savedUrl.getCreatedAt());
 
         return response;
+    }
+
+    @Override
+    public String getOriginalUrl(String shortCode) {
+        return urlRepository.findByShortCode(shortCode)
+                .map(Url::getOriginalUrl)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Short URL not found"));
     }
 
     private String generateShortCode() {
